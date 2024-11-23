@@ -1,23 +1,23 @@
 package com.rinha.java.pessoas;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
 public record PessoaRequest(
         @NotNull
         @NotEmpty
-        @Max(32)
+        @Size(max = 32)
         String apelido,
         @NotNull
         @NotEmpty
-        @Max(100)
+        @Size(max = 100)
         String nome,
         @NotNull
         @NotEmpty
-        @Max(10)
+        @Size(max = 10)
         String nascimento,
         List<String> stack
 ) {
