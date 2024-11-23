@@ -2,6 +2,7 @@ package com.rinha.java.pessoas;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class Pessoa {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
     @Column(name = "nascimento", nullable = false)
-    private String nascimento;
+    private LocalDate nascimento;
     @Column(name = "stack", length = 32)
     private List<String> stack;
 
@@ -28,7 +29,7 @@ public class Pessoa {
     public Pessoa(PessoaRequest request) {
         this.apelido = request.apelido();
         this.nome = request.nome();
-        this.nascimento = request.nascimento();
+        this.nascimento = LocalDate.parse(request.nascimento());
         this.stack = request.stack();
     }
 
@@ -44,7 +45,7 @@ public class Pessoa {
         return nome;
     }
 
-    public String getNascimento() {
+    public LocalDate getNascimento() {
         return nascimento;
     }
 
