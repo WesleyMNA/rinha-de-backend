@@ -40,4 +40,11 @@ public class PessoaService {
         long count = repository.count();
         return CompletableFuture.completedFuture(count);
     }
+
+    @Async
+    public CompletionStage<UUID> create(PessoaRequest request) {
+        var pessoa = new Pessoa(request);
+        repository.save(pessoa);
+        return CompletableFuture.completedFuture(pessoa.getId());
+    }
 }

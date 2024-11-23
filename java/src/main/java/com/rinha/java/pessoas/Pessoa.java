@@ -1,11 +1,7 @@
 package com.rinha.java.pessoas;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +10,7 @@ import java.util.UUID;
 public class Pessoa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
     @Column(name = "apelido", nullable = false, unique = true, length = 32)
@@ -24,6 +21,16 @@ public class Pessoa {
     private String nascimento;
     @Column(name = "stack", length = 32)
     private List<String> stack;
+
+    public Pessoa() {
+    }
+
+    public Pessoa(PessoaRequest request) {
+        this.apelido = request.apelido();
+        this.nome = request.nome();
+        this.nascimento = request.nascimento();
+        this.stack = request.stack();
+    }
 
     public UUID getId() {
         return id;
