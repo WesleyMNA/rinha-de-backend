@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.format.DateTimeParseException;
+
 @ControllerAdvice
 public class GlobalHandler extends ResponseEntityExceptionHandler {
 
@@ -15,7 +17,7 @@ public class GlobalHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResponseEntity<Void>> handleGlobalException(Exception ex, WebRequest request) {
         System.out.println(ex.getClass());
 
-        if (ex instanceof DataIntegrityViolationException)
+        if (ex instanceof DataIntegrityViolationException || ex instanceof DateTimeParseException)
             return ResponseEntity
                     .status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .build();
