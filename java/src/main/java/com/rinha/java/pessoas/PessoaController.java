@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 
@@ -20,8 +21,10 @@ public class PessoaController {
     }
 
     @GetMapping("/pessoas")
-    public CompletionStage<ResponseEntity<?>> findByTermo(@RequestParam String t) {
-        return null;
+    public CompletionStage<ResponseEntity<List<PessoaResponse>>> findByTermo(@RequestParam String t) {
+        return service
+                .findByTermo(t)
+                .thenApply(ResponseEntity::ok);
     }
 
     @GetMapping("/pessoas/{id}")
