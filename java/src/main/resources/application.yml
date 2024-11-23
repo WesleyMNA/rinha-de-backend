@@ -8,7 +8,7 @@ spring:
     name: rinha-java
     timezone: ${TIMEZONE:America/Sao_Paulo}
   datasource:
-    url: jdbc:postgresql://${DB_HOST:db}:5432/${DB_NAME:rinha}
+    url: jdbc:postgresql://${DB_HOST:java_db}:5432/${POSTGRES_DB:rinha}
     username: postgres
     password: postgres
   jmx:
