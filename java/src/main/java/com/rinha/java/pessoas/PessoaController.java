@@ -24,8 +24,10 @@ public class PessoaController {
     }
 
     @GetMapping("/pessoas/{id}")
-    public CompletionStage<ResponseEntity<?>> findById(@PathVariable UUID id) {
-        return null;
+    public CompletionStage<ResponseEntity<PessoaResponse>> findById(@PathVariable UUID id) {
+        return service
+                .findById(id)
+                .thenApply(res -> res.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build()));
     }
 
     @Async
