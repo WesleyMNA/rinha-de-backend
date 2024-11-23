@@ -22,6 +22,8 @@ public class Pessoa {
     private LocalDate nascimento;
     @Column(name = "stack", length = 32)
     private List<String> stack;
+    @Column(name = "searchable", nullable = false)
+    private String searchable;
 
     public Pessoa() {
     }
@@ -31,6 +33,7 @@ public class Pessoa {
         this.nome = request.nome();
         this.nascimento = LocalDate.parse(request.nascimento());
         this.stack = request.stack();
+        this.searchable = "%s %s %s".formatted(apelido, nome, stack);
     }
 
     public UUID getId() {
@@ -53,12 +56,7 @@ public class Pessoa {
         return stack;
     }
 
-    private boolean isNumber(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public String getSearchable() {
+        return searchable;
     }
 }
