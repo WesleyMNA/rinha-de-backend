@@ -24,4 +24,24 @@ public class Pessoa {
     private String nascimento;
     @Column(name = "stack", length = 32)
     private List<String> stack;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getNascimento() {
+        return nascimento;
+    }
+
+    public List<String> getStack() {
+        return stack;
+    }
 }
