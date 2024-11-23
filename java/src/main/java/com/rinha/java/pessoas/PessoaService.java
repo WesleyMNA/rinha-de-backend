@@ -43,8 +43,35 @@ public class PessoaService {
 
     @Async
     public CompletionStage<UUID> create(PessoaRequest request) {
+        validateRequest(request);
         var pessoa = new Pessoa(request);
         repository.save(pessoa);
         return CompletableFuture.completedFuture(pessoa.getId());
     }
+
+    private void validateRequest(PessoaRequest request) {
+        if (isNumber(request.apelido()))
+            throw new RuntimeException();
+
+        if (isNumber(request.nome()))
+            throw new RuntimeException();
+
+        if (isNumber(request.nascimento()))
+            throw new RuntimeException();
+
+        request.stack().forEach(value -> {
+            if (isNumber(value))
+                throw new RuntimeException();
+        });
+    }
+
+    private boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 }
