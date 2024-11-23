@@ -20,6 +20,7 @@ public class PessoaController {
         this.service = service;
     }
 
+    @Async
     @GetMapping("/pessoas")
     public CompletionStage<ResponseEntity<List<PessoaResponse>>> findByTermo(@RequestParam String t) {
         return service
@@ -27,6 +28,7 @@ public class PessoaController {
                 .thenApply(ResponseEntity::ok);
     }
 
+    @Async
     @GetMapping("/pessoas/{id}")
     public CompletionStage<ResponseEntity<PessoaResponse>> findById(@PathVariable UUID id) {
         return service
