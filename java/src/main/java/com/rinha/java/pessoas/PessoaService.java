@@ -59,10 +59,11 @@ public class PessoaService {
         if (isNumber(request.nascimento()))
             throw new RuntimeException();
 
-        request.stack().forEach(value -> {
-            if (isNumber(value))
-                throw new RuntimeException();
-        });
+        if (request.stack() != null)
+            request.stack().forEach(value -> {
+                if (isNumber(value))
+                    throw new RuntimeException();
+            });
     }
 
     private boolean isNumber(String str) {
