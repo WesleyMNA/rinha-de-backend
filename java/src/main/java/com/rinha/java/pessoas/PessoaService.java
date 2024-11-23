@@ -3,6 +3,7 @@ package com.rinha.java.pessoas;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -18,6 +19,15 @@ public class PessoaService {
     }
 
     @Async
+    public CompletionStage<List<PessoaResponse>> findByTermo(String termo) {
+        List<Pessoa> pessoas = repository.findTop50BySearchableLike("%" + termo + "%");
+        var res = pessoas.stream()
+                .map(this::toResponse)
+                .toList();
+        return CompletableFuture.completedFuture(res);
+    }
+
+    @Async
     public CompletionStage<Optional<PessoaResponse>> findById(UUID id) {
         Optional<Pessoa> optional = repository.findById(id);
 
@@ -25,14 +35,18 @@ public class PessoaService {
             return CompletableFuture.completedFuture(Optional.empty());
 
         Pessoa pessoa = optional.get();
-        var res = new PessoaResponse(
+        var res = toResponse(pessoa);
+        return CompletableFuture.completedFuture(Optional.of(res));
+    }
+
+    private PessoaResponse toResponse(Pessoa pessoa) {
+        return new PessoaResponse(
                 pessoa.getId(),
                 pessoa.getApelido(),
                 pessoa.getNome(),
                 pessoa.getNascimento(),
                 pessoa.getStack()
         );
-        return CompletableFuture.completedFuture(Optional.of(res));
     }
 
     @Async
@@ -74,5 +88,4 @@ public class PessoaService {
             return false;
         }
     }
-
 }
