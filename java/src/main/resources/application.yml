@@ -8,7 +8,7 @@ spring:
     name: rinha-java
     timezone: ${TIMEZONE:America/Sao_Paulo}
   datasource:
-    url: jdbc:postgresql://${DB_HOST:java_db}:5432/${POSTGRES_DB:rinha}
+    url: jdbc:postgresql://${DB_HOST:db}:5432/${POSTGRES_DB:rinha}
     username: postgres
     password: postgres
   jmx:
@@ -17,7 +17,7 @@ spring:
     open-in-view: true
     show-sql: ${SHOW_SQL:false}
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   output:
     ansi:
       enabled: ALWAYS
