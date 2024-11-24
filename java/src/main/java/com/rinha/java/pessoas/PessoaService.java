@@ -1,12 +1,11 @@
 package com.rinha.java.pessoas;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class PessoaService {
@@ -17,25 +16,22 @@ public class PessoaService {
         this.repository = repository;
     }
 
-    @Async
-    public CompletableFuture<List<PessoaResponse>> findByTermo(String termo) {
-        List<Pessoa> pessoas = repository.findTop50BySearchableLike("%" + termo + "%");
-        var res = pessoas.stream()
+    public List<PessoaResponse> findByTermo(String termo) {
+        return repository.findTop50BySearchableLike("%" + termo + "%")
+                .stream()
                 .map(this::toResponse)
                 .toList();
-        return CompletableFuture.completedFuture(res);
     }
 
-    @Async
-    public CompletableFuture<Optional<PessoaResponse>> findById(UUID id) {
+    public Optional<PessoaResponse> findById(UUID id) {
         Optional<Pessoa> optional = repository.findById(id);
 
         if (optional.isEmpty())
-            return CompletableFuture.completedFuture(Optional.empty());
+            return Optional.empty();
 
         Pessoa pessoa = optional.get();
         var res = toResponse(pessoa);
-        return CompletableFuture.completedFuture(Optional.of(res));
+        return Optional.of(res);
     }
 
     private PessoaResponse toResponse(Pessoa pessoa) {
@@ -48,18 +44,15 @@ public class PessoaService {
         );
     }
 
-    @Async
-    public CompletableFuture<Long> count() {
-        long count = repository.count();
-        return CompletableFuture.completedFuture(count);
+    public Long count() {
+        return repository.count();
     }
 
-    @Async
-    public CompletableFuture<UUID> create(PessoaRequest request) {
+    public UUID create(PessoaRequest request) {
         validateRequest(request);
         var pessoa = new Pessoa(request);
         repository.save(pessoa);
-        return CompletableFuture.completedFuture(pessoa.getId());
+        return pessoa.getId();
     }
 
     private void validateRequest(PessoaRequest request) {
@@ -67,9 +60,6 @@ public class PessoaService {
             throw new RuntimeException();
 
         if (isNumber(request.nome()))
-            throw new RuntimeException();
-
-        if (isNumber(request.nascimento()))
             throw new RuntimeException();
 
         if (request.stack() != null)
