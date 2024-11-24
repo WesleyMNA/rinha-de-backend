@@ -33,7 +33,7 @@ public class Pessoa {
         this.nome = request.nome();
         this.nascimento = LocalDate.parse(request.nascimento());
         this.stack = request.stack();
-        this.searchable = "%s %s %s".formatted(apelido, nome, stack);
+        this.searchable = generateSearchable(this.apelido, this.nome, this.stack);
     }
 
     public UUID getId() {
@@ -56,7 +56,15 @@ public class Pessoa {
         return stack;
     }
 
-    public String getSearchable() {
-        return searchable;
+    private static String generateSearchable(String nome, String apelido, List<String> stack) {
+        StringBuilder result = new StringBuilder(String.format("{%s, %s", nome, apelido));
+
+        if (stack != null && !stack.isEmpty()) {
+            result.append(", ");
+            result.append(String.join(", ", stack));
+        }
+
+        result.append("}");
+        return result.toString();
     }
 }
