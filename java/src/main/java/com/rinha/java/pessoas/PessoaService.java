@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 @Service
 public class PessoaService {
@@ -19,7 +18,7 @@ public class PessoaService {
     }
 
     @Async
-    public CompletionStage<List<PessoaResponse>> findByTermo(String termo) {
+    public CompletableFuture<List<PessoaResponse>> findByTermo(String termo) {
         List<Pessoa> pessoas = repository.findTop50BySearchableLike("%" + termo + "%");
         var res = pessoas.stream()
                 .map(this::toResponse)
@@ -28,7 +27,7 @@ public class PessoaService {
     }
 
     @Async
-    public CompletionStage<Optional<PessoaResponse>> findById(UUID id) {
+    public CompletableFuture<Optional<PessoaResponse>> findById(UUID id) {
         Optional<Pessoa> optional = repository.findById(id);
 
         if (optional.isEmpty())
@@ -50,13 +49,13 @@ public class PessoaService {
     }
 
     @Async
-    public CompletionStage<Long> count() {
+    public CompletableFuture<Long> count() {
         long count = repository.count();
         return CompletableFuture.completedFuture(count);
     }
 
     @Async
-    public CompletionStage<UUID> create(PessoaRequest request) {
+    public CompletableFuture<UUID> create(PessoaRequest request) {
         validateRequest(request);
         var pessoa = new Pessoa(request);
         repository.save(pessoa);

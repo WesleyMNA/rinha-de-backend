@@ -15,8 +15,6 @@ public class GlobalHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseEntity<Void>> handleGlobalException(Exception ex, WebRequest request) {
-        System.out.println(ex.getClass());
-
         if (ex instanceof DataIntegrityViolationException || ex instanceof DateTimeParseException)
             return ResponseEntity
                     .status(HttpStatus.UNPROCESSABLE_ENTITY)

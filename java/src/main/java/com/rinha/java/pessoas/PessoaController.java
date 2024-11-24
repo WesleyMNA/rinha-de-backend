@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping
@@ -22,7 +22,7 @@ public class PessoaController {
 
     @Async
     @GetMapping("/pessoas")
-    public CompletionStage<ResponseEntity<List<PessoaResponse>>> findByTermo(@RequestParam String t) {
+    public CompletableFuture<ResponseEntity<List<PessoaResponse>>> findByTermo(@RequestParam(name = "t") String t) {
         return service
                 .findByTermo(t)
                 .thenApply(ResponseEntity::ok);
@@ -30,7 +30,7 @@ public class PessoaController {
 
     @Async
     @GetMapping("/pessoas/{id}")
-    public CompletionStage<ResponseEntity<PessoaResponse>> findById(@PathVariable UUID id) {
+    public CompletableFuture<ResponseEntity<PessoaResponse>> findById(@PathVariable UUID id) {
         return service
                 .findById(id)
                 .thenApply(res -> res.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build()));
@@ -38,14 +38,14 @@ public class PessoaController {
 
     @Async
     @GetMapping("/contagem-pessoas")
-    public CompletionStage<ResponseEntity<Long>> count() {
+    public CompletableFuture<ResponseEntity<Long>> count() {
         return service.count().thenApply(ResponseEntity::ok);
     }
 
     @Async
     @PostMapping("/pessoas")
-    public CompletionStage<ResponseEntity<Void>> create(@RequestBody @Valid PessoaRequest request,
-                                                        UriComponentsBuilder builder) {
+    public CompletableFuture<ResponseEntity<Void>> create(@RequestBody @Valid PessoaRequest request,
+                                                          UriComponentsBuilder builder) {
         return service.create(request)
                 .thenApply(id ->
                         ResponseEntity
