@@ -9,7 +9,6 @@ public record PessoaRequest(
         String apelido,
         @Size(max = 100)
         String nome,
-        @Size(max = 10)
         String nascimento,
         List<String> stack
 ) {
