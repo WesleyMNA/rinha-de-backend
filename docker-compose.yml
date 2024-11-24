@@ -4,6 +4,29 @@ services:
     container_name: db
     restart: always
     env_file:
-      - java/.env
+      - .env
     ports:
       - '5432:5432'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: '0.5GB'
+
+  api1:
+    build:
+      context: ./java
+    container_name: api1
+    restart: always
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: '0.5GB'
+
+  ap2:
+    extends:
+      service: api1
+    container_name: api2
