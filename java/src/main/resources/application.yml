@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:db}:5432/${POSTGRES_DB:rinha}
     username: postgres
-    password: postgres
+    password: root
   jmx:
     enabled: true
   jpa:
