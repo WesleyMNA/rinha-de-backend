@@ -22,7 +22,7 @@ public class Pessoa {
     private LocalDate nascimento;
     @Column(name = "stack", length = 32)
     private List<String> stack;
-    @Column(name = "searchable", nullable = false)
+    @Column(name = "searchable", insertable = false, updatable = false)
     private String searchable;
 
     public Pessoa() {
@@ -47,7 +47,6 @@ public class Pessoa {
             });
 
         this.stack = request.stack();
-        this.searchable = generateSearchable(this.apelido, this.nome, this.stack);
     }
 
     public UUID getId() {
@@ -68,18 +67,6 @@ public class Pessoa {
 
     public List<String> getStack() {
         return stack;
-    }
-
-    private static String generateSearchable(String nome, String apelido, List<String> stack) {
-        StringBuilder result = new StringBuilder(String.format("{%s, %s", nome, apelido));
-
-        if (stack != null && !stack.isEmpty()) {
-            result.append(", ");
-            result.append(String.join(", ", stack));
-        }
-
-        result.append("}");
-        return result.toString();
     }
 
     private boolean isNumber(String str) {
