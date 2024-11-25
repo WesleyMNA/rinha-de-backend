@@ -29,9 +29,23 @@ public class Pessoa {
     }
 
     public Pessoa(PessoaRequest request) {
+        if (isNumber(request.apelido()))
+            throw new RuntimeException();
+
         this.apelido = request.apelido();
+
+        if (isNumber(request.nome()))
+            throw new RuntimeException();
+
         this.nome = request.nome();
         this.nascimento = LocalDate.parse(request.nascimento());
+
+        if (request.stack() != null)
+            request.stack().forEach(value -> {
+                if (isNumber(value))
+                    throw new RuntimeException();
+            });
+
         this.stack = request.stack();
         this.searchable = generateSearchable(this.apelido, this.nome, this.stack);
     }
@@ -66,5 +80,14 @@ public class Pessoa {
 
         result.append("}");
         return result.toString();
+    }
+
+    private boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

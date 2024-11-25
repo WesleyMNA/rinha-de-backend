@@ -2,7 +2,6 @@ package com.rinha.java.pessoas;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,32 +48,8 @@ public class PessoaService {
     }
 
     public UUID create(PessoaRequest request) {
-        validateRequest(request);
         var pessoa = new Pessoa(request);
         repository.save(pessoa);
         return pessoa.getId();
-    }
-
-    private void validateRequest(PessoaRequest request) {
-        if (isNumber(request.apelido()))
-            throw new RuntimeException();
-
-        if (isNumber(request.nome()))
-            throw new RuntimeException();
-
-        if (request.stack() != null)
-            request.stack().forEach(value -> {
-                if (isNumber(value))
-                    throw new RuntimeException();
-            });
-    }
-
-    private boolean isNumber(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 }
