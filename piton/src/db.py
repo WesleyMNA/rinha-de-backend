@@ -3,9 +3,9 @@ from typing import List
 from uuid import UUID
 
 from sqlalchemy import String, TEXT, text
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import ARRAY
 
 from src.env import env
 
@@ -18,6 +18,11 @@ engine = create_async_engine(
     echo=env.show_sql,
 )
 async_session = async_sessionmaker(bind=engine)
+
+
+async def get_db():
+    async with async_session() as db:
+        yield db
 
 
 class Base(DeclarativeBase):
