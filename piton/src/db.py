@@ -1,3 +1,4 @@
+import uuid
 from datetime import date
 from typing import List
 from uuid import UUID
