@@ -14,36 +14,38 @@ import java.util.UUID;
 @RequestMapping
 public class PessoaController {
 
-    private final PessoaService service;
+    private final PessoaRepository repository;
 
-    public PessoaController(PessoaService service) {
-        this.service = service;
+    public PessoaController(PessoaRepository repository) {
+        this.repository = repository;
     }
 
     @GetMapping("/pessoas")
     public ResponseEntity<List<PessoaResponse>> findByTermo(@RequestParam(name = "t") String t) {
-        List<PessoaResponse> res = service.findByTermo(t);
+        List<PessoaResponse> res = repository.findTop50BySearchableLike("%" + t + "%");
         return ResponseEntity.ok(res);
     }
 
     @GetMapping("/pessoas/{id}")
     public ResponseEntity<PessoaResponse> findById(@PathVariable UUID id) {
-        Optional<PessoaResponse> res = service.findById(id);
+        Optional<PessoaResponse> res = repository.findIdApelidoNomeNascimentoStackById(id);
         return res.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/contagem-pessoas")
     public ResponseEntity<Long> count() {
-        return ResponseEntity.ok(service.count());
+        return ResponseEntity.ok(repository.count());
     }
 
     @PostMapping("/pessoas")
     public ResponseEntity<Void> create(@RequestBody @Valid PessoaRequest request)
             throws URISyntaxException {
-        UUID id = service.create(request);
+        var pessoa = new Pessoa(request);
+        repository.save(pessoa);
         return ResponseEntity
-                .created(new URI("/pessoas/%s".formatted(id)))
+                .created(new URI("/pessoas/%s".formatted(pessoa.getId())))
                 .build();
     }
+
 }
