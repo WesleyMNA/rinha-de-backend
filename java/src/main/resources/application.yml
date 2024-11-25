@@ -21,6 +21,3 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-  sql:
-    init:
-      mode: always
