@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -14,12 +14,20 @@ DbSession = Annotated[AsyncSession, Depends(get_db)]
 pessoa_router = APIRouter(prefix='/pessoas')
 
 
-@pessoa_router.get('')
+@pessoa_router.get(
+    '',
+    response_model=List[PessoaResponse]
+)
 async def find_by_termo(
         db: DbSession,
-        t: str = Query(),
+        t: str | None = Query(None),
 ):
-    pass
+    if t is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
+    query = select(Pessoa).where(Pessoa.searchable.like(f'%{t}%')).limit(50)
+    result = await db.execute(query)
+    return result.scalars().all()
 
 
 @pessoa_router.get(
