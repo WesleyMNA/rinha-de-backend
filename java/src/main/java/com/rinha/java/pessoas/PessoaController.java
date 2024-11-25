@@ -47,5 +47,4 @@ public class PessoaController {
                 .created(new URI("/pessoas/%s".formatted(pessoa.getId())))
                 .build();
     }
-
 }
