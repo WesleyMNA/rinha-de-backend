@@ -42,12 +42,11 @@ public class PessoaController {
     @PostMapping("/pessoas")
     public ResponseEntity<Void> create(@RequestBody @Valid PessoaRequest request)
             throws URISyntaxException {
-        LocalDate date = LocalDate.parse(request.nascimento());
         validate(request);
-        UUID id = UUID.randomUUID();
-        repository.insert(id, request.apelido(), request.nome(), date, request.stack());
+        var pessoa = new Pessoa(request);
+        repository.save(pessoa);
         return ResponseEntity
-                .created(new URI("/pessoas/%s".formatted(id)))
+                .created(new URI("/pessoas/%s".formatted(pessoa.getId())))
                 .build();
     }
 
