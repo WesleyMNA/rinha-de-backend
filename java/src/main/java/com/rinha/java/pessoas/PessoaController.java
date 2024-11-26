@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,10 +42,35 @@ public class PessoaController {
     @PostMapping("/pessoas")
     public ResponseEntity<Void> create(@RequestBody @Valid PessoaRequest request)
             throws URISyntaxException {
-        var pessoa = new Pessoa(request);
-        repository.save(pessoa);
+        LocalDate date = LocalDate.parse(request.nascimento());
+        validate(request);
+        UUID id = UUID.randomUUID();
+        repository.insert(id, request.apelido(), request.nome(), date, request.stack());
         return ResponseEntity
-                .created(new URI("/pessoas/%s".formatted(pessoa.getId())))
+                .created(new URI("/pessoas/%s".formatted(id)))
                 .build();
+    }
+
+    private void validate(PessoaRequest request) {
+        if (isNumber(request.apelido()))
+            throw new RuntimeException();
+
+        if (isNumber(request.nome()))
+            throw new RuntimeException();
+
+        if (request.stack() != null)
+            for (String value : request.stack()) {
+                if (isNumber(value))
+                    throw new RuntimeException();
+            }
+    }
+
+    private boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
