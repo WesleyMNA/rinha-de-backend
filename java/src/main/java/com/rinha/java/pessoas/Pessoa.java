@@ -21,7 +21,7 @@ public class Pessoa {
     @Column(name = "nascimento", nullable = false)
     private LocalDate nascimento;
     @Column(name = "stack", length = 32)
-    private List<String> stack;
+    private String[] stack;
     @Column(name = "searchable", insertable = false, updatable = false)
     private String searchable;
 
@@ -29,23 +29,10 @@ public class Pessoa {
     }
 
     public Pessoa(PessoaRequest request) {
-        if (isNumber(request.apelido()))
-            throw new RuntimeException();
-
         this.apelido = request.apelido();
-
-        if (isNumber(request.nome()))
-            throw new RuntimeException();
 
         this.nome = request.nome();
         this.nascimento = LocalDate.parse(request.nascimento());
-
-        if (request.stack() != null)
-            request.stack().forEach(value -> {
-                if (isNumber(value))
-                    throw new RuntimeException();
-            });
-
         this.stack = request.stack();
     }
 
@@ -65,16 +52,7 @@ public class Pessoa {
         return nascimento;
     }
 
-    public List<String> getStack() {
+    public String[] getStack() {
         return stack;
-    }
-
-    private boolean isNumber(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 }

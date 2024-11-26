@@ -18,6 +18,8 @@ spring:
     show-sql: ${SHOW_SQL:false}
     hibernate:
       ddl-auto: none
+#      jdbc:
+#        batch_size: 100
   output:
     ansi:
       enabled: ALWAYS

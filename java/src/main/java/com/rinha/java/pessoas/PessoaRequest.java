@@ -10,6 +10,6 @@ public record PessoaRequest(
         @Size(max = 100)
         String nome,
         String nascimento,
-        List<String> stack
+        String[] stack
 ) {
 }
