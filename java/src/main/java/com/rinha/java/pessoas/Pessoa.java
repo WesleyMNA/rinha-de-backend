@@ -3,7 +3,6 @@ package com.rinha.java.pessoas;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +29,6 @@ public class Pessoa {
 
     public Pessoa(PessoaRequest request) {
         this.apelido = request.apelido();
-
         this.nome = request.nome();
         this.nascimento = LocalDate.parse(request.nascimento());
         this.stack = request.stack();
