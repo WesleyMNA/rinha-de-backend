@@ -1,7 +1,7 @@
-FROM maven:3.9-amazoncorretto-21 as builder
+FROM maven:3.9.9-amazoncorretto-21 as builder
 
 WORKDIR /app
-COPY ./ /app
+COPY . /app
 
 RUN mvn -DskipTests=true clean
 RUN mvn -B -DskipTests install

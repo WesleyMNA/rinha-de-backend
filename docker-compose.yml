@@ -32,7 +32,7 @@ services:
 
   api1:
     build:
-      context: ./java
+      context: .
     container_name: api1
     restart: always
     env_file:
